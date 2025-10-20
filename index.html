@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lissage 4 index ➜ 2 index (Mobile)</title>
+  <style>
+    :root {
+      --bleu: #2563eb;
+      --bleu-fonce: #1d4ed8;
+      --gris: #f3f4f6;
+      --bdr: #d1d5db;
+    }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--gris);
+      margin: 0;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--bdr);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 420px;
+    }
+    h1 {
+      font-size: 1.3rem;
+      text-align: center;
+      margin-bottom: 0.2rem;
+      color: #111;
+    }
+    p {
+      text-align: center;
+      color: #555;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 0.6rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      box-sizing: border-box;
+    }
+    .label-letter {
+      display: inline-block;
+      background: var(--bleu);
+      color: white;
+      font-weight: bold;
+      width: 22px;
+      height: 22px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 6px;
+      font-size: 0.85rem;
+    }
+    .op-sign {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--bleu);
+      margin: 0.3rem 0;
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    button {
+      flex: 1;
+      min-width: 90px;
+      background: var(--bleu);
+      color: white;
+      border: none;
+      padding: 0.7rem 1rem;
+      border-radius: 0.6rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: var(--bleu-fonce); }
+    .secondary {
+      background: #e5e7eb;
+      color: #111;
+    }
+    .secondary:hover { background: #d1d5db; }
+    .danger {
+      background: #ef4444;
+    }
+    .danger:hover { background: #dc2626; }
+    .formula {
+      margin-top: 1rem;
+      background: #eff6ff;
+      border-left: 4px solid var(--bleu);
+      padding: 0.6rem 0.8rem;
+      border-radius: 0.4rem;
+      color: #1e3a8a;
+      font-family: "Consolas", monospace;
+      font-size: 0.95rem;
+      white-space: pre-line;
+    }
+    .trace {
+      background: #f0f9ff;
+      border-left: 4px solid #38bdf8;
+      padding: 0.6rem 0.8rem;
+      border-radius: 0.4rem;
+      color: #0c4a6e;
+      font-family: "Consolas", monospace;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>📘 Lissage 4 ➜ 2 index</h1>
+    <p>(A − B) + (C − D)</p>
+
+    <label>Date début</label>
+    <input id="dateDebut" type="date" value="2024-10-31">
+
+    <label>Date fin</label>
+    <input id="dateFin" type="date" value="2025-01-30">
+
+    <h3>Ancien compteur</h3>
+    <label><span class="label-letter">A</span>Index de dépose (ancien)</label>
+    <input id="ancDepose" type="number" inputmode="numeric" value="7020">
+
+    <div class="op-sign">−</div>
+
+    <label><span class="label-letter">B</span>Index de début (ancien)</label>
+    <input id="ancDebut" type="number" inputmode="numeric" value="350">
+
+    <div class="op-sign">+</div>
+
+    <h3>Nouveau compteur</h3>
+    <label><span class="label-letter">C</span>Index de fin (nouveau)</label>
+    <input id="nvFin" type="number" inputmode="numeric" value="75">
+
+    <div class="op-sign">−</div>
+
+    <label><span class="label-letter">D</span>Index de pose (nouveau)</label>
+    <input id="nvPose" type="number" inputmode="numeric" value="0">
+
+    <div class="btn-group">
+      <button onclick="calculer()">🔢 Calculer</button>
+      <button class="secondary" onclick="exemple()">📋 Exemple</button>
+      <button class="danger" onclick="resetForm()">🧹 Reset</button>
+    </div>
+
+    <div id="formule" class="formula">Formule : (A − B) + (C − D)</div>
+    <div id="trace" class="trace"></div>
+  </div>
+
+  <footer>Lissage 4 ➜ 2 index – Mode smartphone</footer>
+
+  <script>
+    function calculer() {
+      const A = parseFloat(document.getElementById("ancDepose").value);
+      const B = parseFloat(document.getElementById("ancDebut").value);
+      const C = parseFloat(document.getElementById("nvFin").value);
+      const D = parseFloat(document.getElementById("nvPose").value);
+      const dateDebut = document.getElementById("dateDebut").value;
+      const dateFin = document.getElementById("dateFin").value;
+
+      if ([A, B, C, D].some(isNaN)) {
+        alert("⚠️ Remplis toutes les valeurs (A, B, C, D).");
+        return;
+      }
+      if (A < B) return alert("⚠️ L’ancien compteur ne peut pas reculer.");
+      if (C < D) return alert("⚠️ Le nouveau compteur ne peut pas reculer.");
+
+      const qTot = (A - B) + (C - D);
+      const finVirtuel = B + qTot;
+
+      document.getElementById("formule").innerHTML =
+        `Formule : (${A} − ${B}) + (${C} − ${D}) = <strong>${qTot}</strong>`;
+
+      document.getElementById("trace").textContent =
+        `CC – du ${dateDebut} au ${dateFin} | Début : ${B} | Fin virtuel : ${finVirtuel} | Qté : ${qTot}`;
+    }
+
+    function exemple() {
+      document.getElementById("dateDebut").value = "2024-10-31";
+      document.getElementById("dateFin").value = "2025-01-30";
+      document.getElementById("ancDepose").value = 7020;
+      document.getElementById("ancDebut").value = 450;
+      document.getElementById("nvFin").value = 75;
+      document.getElementById("nvPose").value = 0;
+      calculer();
+    }
+
+    function resetForm() {
+      document.querySelectorAll("input").forEach(i => i.value = "");
+      document.getElementById("formule").innerHTML = "Formule : (A − B) + (C − D)";
+      document.getElementById("trace").textContent = "";
+    }
+  </script>
+</body>
+</html>
